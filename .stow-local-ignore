@@ -1,0 +1,7 @@
+# Files and anything to not link from ~/ into .
+.git
+scripts
+README.md
+
+
+screenshots

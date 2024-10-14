@@ -1,0 +1,78 @@
+import = [
+    "~/.config/alacritty/themes/themes/falcon.toml"
+]
+
+    live_config_reload = true
+
+[colors]
+draw_bold_text_with_bright_colors = true
+
+[cursor]
+style = "Block"
+unfocused_hollow = true
+
+[debug]
+log_level = "Warn"
+persistent_logging = false
+print_events = false
+render_timer = false
+
+
+[env]
+TERM = "xterm-256color"
+
+
+[font]
+# size = 13.3
+size = 10.5
+
+[font.glyph_offset]
+x = 0
+y = 0
+
+[font.normal]
+family = "0xProto Nerd Font"
+style = "Regular"
+
+[font.offset]
+x = 0
+y = 0
+
+[mouse]
+hide_when_typing = false
+
+[[mouse.bindings]]
+action = "PasteSelection"
+mouse = "Middle"
+
+# [mouse.double_click]
+# threshold = 300
+
+# [mouse.hints]
+# modifiers = "None"
+
+# [mouse.triple_click]
+# threshold = 300
+
+[scrolling]
+history = 10000
+multiplier = 3
+
+[selection]
+save_to_clipboard = false
+semantic_escape_chars = ",│`|:\"' ()[]{}<>"
+
+[window]
+blur = false 
+decorations = "full"
+dynamic_padding = true
+opacity = 0.98 # 0.85
+startup_mode = "Windowed"
+
+[window.dimensions]
+columns = 105
+lines = 40
+
+[window.padding]
+x = 2
+y = 0
