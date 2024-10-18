@@ -58,6 +58,8 @@ return packer.startup(function(use)
 
 	use("szw/vim-maximizer") -- Maximises and restores current window
 
+	use("goolord/alpha-nvim")
+
 	-- Essential Plugins
 	-- | Ex: Normal mode: ys -> g@w -> Character to wrap
 	-- | Ex: Normal mode: ds -> Character surrounding to delete
