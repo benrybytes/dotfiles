@@ -8,5 +8,8 @@ README.md
 .config/autostart
 .config/chromium
 
+.DS_Store
+
+
 
 screenshots
