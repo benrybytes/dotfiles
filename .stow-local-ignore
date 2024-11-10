@@ -2,6 +2,14 @@
 .git
 scripts
 README.md
+.config/lunarclient
+.config/mimeapp.list
+.config/coc
+.config/autostart
+.config/chromium
+
+.DS_Store
+
 
 
 screenshots
