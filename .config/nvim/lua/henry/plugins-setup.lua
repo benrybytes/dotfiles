@@ -172,17 +172,12 @@ return packer.startup(function(use)
     use 'simrat39/rust-tools.nvim'
 
 
-    -- install without yarn or npm
-    use({
-        "iamcco/markdown-preview.nvim",
-        run = "cd app && npm install",
-        setup = function()
-            vim.g.mkdp_filetypes = {
-                "markdown" }
-        end,
-        ft = { "markdown" },
-    })
-    use("MunifTanjim/prettier.nvim")
+-- install without yarn or npm
+use({
+    "iamcco/markdown-preview.nvim",
+    run = function() vim.fn["mkdp#util#install"]() end,
+})
+    use { "MunifTanjim/prettier.nvim" }
 
     if packer_bootstrap then
         require("packer").sync()
