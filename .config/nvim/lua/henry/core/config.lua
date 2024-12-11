@@ -38,14 +38,21 @@ end)(vim.diagnostic.open_float)
 vim.o.updatetime = 250
 vim.cmd([[
 set signcolumn=yes
-autocmd CursorHold * lua vim.diagnostic.open_float(nil, { focusable = false })
+autocmd CursorHold * lua vim.diagnostic.open_float(nil, { focusable = true })
 ]])
+
+vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
+    focusable = true, -- Allow interaction with the window
+    border = "rounded", -- Optional: Add a border to the window
+})
+
+
 -- Show source in diagnostics, not inline but as a floating popup
 vim.diagnostic.config({
-    signs = true,          -- Show signs in the sign column
-    underline = true,      -- Underline problematic code
+    signs = true,             -- Show signs in the sign column
+    underline = true,         -- Underline problematic code
     update_in_insert = false, -- Update diagnostics while in insert mode
-    severity_sort = true,  -- Sort diagnostics by severity
+    severity_sort = true,     -- Sort diagnostics by severity
     virtual_text = false,
     float = {
         source = "always", -- Or "if_many"

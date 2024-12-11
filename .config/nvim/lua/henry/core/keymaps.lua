@@ -9,6 +9,10 @@ local keymap = vim.keymap -- All keys
 keymap.set("n", "<leader>+", "<C-a>", { desc = "Increment number" }) -- increment
 keymap.set("n", "<leader>-", "<C-x>", { desc = "Decrement number" }) -- decrement
 
+-- Scroll inside hover documentation or definition preview
+keymap.set("n", "<C-j>", "<cmd>Lspsaga hover_doc ++keep<CR>", opts)
+keymap.set("n", "<C-k>", "<cmd>Lspsaga hover_doc ++keep<CR>", opts)
+
 
 -- Breakpoints
 keymap.set("n", "<leader>db", "<cmd> DapToggleBreakpoint <CR>", { desc = "breakpoint to line" })

@@ -32,7 +32,8 @@ cmp.setup({
         -- Add tab support
         ["<S-Tab>"] = cmp.mapping.select_prev_item(),
         ["<Tab>"] = cmp.mapping.select_next_item(),
-        ["<C-S-f>"] = cmp.mapping.scroll_docs(-4),
+        -- scroll through the documentation of the lsp-preview of the functions
+        ["<C-d>"] = cmp.mapping.scroll_docs(-4),
         ["<C-f>"] = cmp.mapping.scroll_docs(4),
         ["<C-Space>"] = cmp.mapping.complete(),
         ["<C-e>"] = cmp.mapping.close(),

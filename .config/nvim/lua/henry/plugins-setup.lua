@@ -148,6 +148,8 @@ return packer.startup(function(use)
     use("lewis6991/gitsigns.nvim") -- show line modifications on left hand side
     use("tpope/vim-fugitive")      -- Help simplify git with commits, add, push, etc
 
+    use("rachartier/tiny-inline-diagnostic.nvim")
+
     use({
         "neoclide/coc.nvim",
         branch = "release",
@@ -164,19 +166,14 @@ return packer.startup(function(use)
         requires = { { "nvim-lua/plenary.nvim" } },
     })
 
-    use({
-        "OXY2DEV/markview.nvim",
-        lazy = false, -- Recommended
-    })
-
     use 'simrat39/rust-tools.nvim'
 
 
--- install without yarn or npm
-use({
-    "iamcco/markdown-preview.nvim",
-    run = function() vim.fn["mkdp#util#install"]() end,
-})
+    -- install without yarn or npm
+    use({
+        "iamcco/markdown-preview.nvim",
+        run = function() vim.fn["mkdp#util#install"]() end,
+    })
     use { "MunifTanjim/prettier.nvim" }
 
     if packer_bootstrap then
