@@ -16,7 +16,7 @@ keymap.set("n", "<leader>dr", "<cmd> DapContinue <CR>", { desc = "move to next b
 
 -- Move chunks of lines when selected
 keymap.set("v", "J", ":m '>+1<CR>gv=gv")
-keymap.set("v", "K", ":m '<1<CR>gv=gv")
+keymap.set("v", "K", ":m '<-2<CR>gv=gv")
 keymap.set("n", "J", "mzJ`z") -- Takes line below and append to current line
 
 -- window management

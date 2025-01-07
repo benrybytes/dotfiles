@@ -44,8 +44,9 @@ return packer.startup(function(use)
     }
     use 'jay-babu/mason-nvim-dap.nvim'
 
-    -- Luau with vim
-    -- use("polychromatist/luau-vim")
+    use { 'kdheepak/monochrome.nvim', config = function()
+        vim.cmd 'colorscheme monochrome'
+    end }
 
     use({
         "lopi-py/luau-lsp.nvim",

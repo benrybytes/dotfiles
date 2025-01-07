@@ -1,6 +1,7 @@
 local opt = vim.opt -- for conciseness
 local api = vim.api
 
+opt.fillchars = { eob = ' ' }
 -- For Obsidian to use formatting
 opt.conceallevel = 1
 
@@ -53,7 +54,7 @@ opt.iskeyword:append("-")
 
 opt.updatetime = 50
 
-opt.completeopt = {'menuone', 'noselect', 'noinsert'}
-opt.shortmess = vim.opt.shortmess + { c = true}
+opt.completeopt = { 'menuone', 'noselect', 'noinsert' }
+opt.shortmess = vim.opt.shortmess + { c = true }
 
 api.nvim_set_option('updatetime', 300)
