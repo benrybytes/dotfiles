@@ -44,9 +44,7 @@ return packer.startup(function(use)
     }
     use 'jay-babu/mason-nvim-dap.nvim'
 
-    use { 'kdheepak/monochrome.nvim', config = function()
-        vim.cmd 'colorscheme monochrome'
-    end }
+    use { 'kdheepak/monochrome.nvim' }
 
     use({
         "lopi-py/luau-lsp.nvim",
@@ -60,7 +58,6 @@ return packer.startup(function(use)
     -- Color Schemes
     use({ "catppuccin/nvim", as = "catppuccin" })
     use({ "rose-pine/neovim", name = "rose-pine" })
-    use("projekt0n/github-nvim-theme")
 
     -- Split windows and navigation
     use("christoomey/vim-tmux-navigator")
@@ -77,6 +74,15 @@ return packer.startup(function(use)
 
     -- File explorer
     use("nvim-tree/nvim-tree.lua")
+    use({
+        "kylechui/nvim-surround",
+        tag = "*", -- Use for stability; omit to use `main` branch for the latest features
+        config = function()
+            require("nvim-surround").setup({
+                -- Configuration here, or leave empty to use defaults
+            })
+        end
+    })
 
     -- file explorer icons
     use("kyazdani42/nvim-web-devicons")
@@ -92,14 +98,11 @@ return packer.startup(function(use)
     use("hrsh7th/nvim-cmp")   -- completion plugin
     use("hrsh7th/cmp-buffer") -- source for text in buffer
     use("hrsh7th/cmp-path")   -- source for file system paths
-    use("hrsh7th/vim-vsnip")
     use("hrsh7th/cmp-nvim-lua")
     use("hrsh7th/cmp-nvim-lsp-signature-help")
-    use("hrsh7th/cmp-vsnip")
     use("hrsh7th/cmp-nvim-lsp") -- for autocompletion
 
     -- snippets
-    use("L3MON4D3/LuaSnip")         -- snippet engine
     use("saadparwaiz1/cmp_luasnip") -- for autocompletion
 
     -- managing & installing lsp servers, linters & formatters
@@ -108,22 +111,11 @@ return packer.startup(function(use)
 
     -- configuring lsp servers
     use("neovim/nvim-lspconfig") -- easily configure language servers
-    use({
-        "kkharji/lspsaga.nvim",
-        branch = "main",
-        requires = {
-            { "nvim-tree/nvim-web-devicons" },
-            { "nvim-treesitter/nvim-treesitter" },
-        },
-    })                          -- enhanced lsp uis
     use("onsails/lspkind.nvim") -- vs-code like icons for autocompletion
 
     -- formatting & linting
     use({
         "jose-elias-alvarez/null-ls.nvim",
-        opts = function()
-            return require "henry.plugins.lsp.null-ls"
-        end,
     })                                 -- configure formatters & linters
     use("jayp0521/mason-null-ls.nvim") -- bridges gap b/w mason & null-ls
 
@@ -147,7 +139,6 @@ return packer.startup(function(use)
 
     -- git integration
     use("lewis6991/gitsigns.nvim") -- show line modifications on left hand side
-    use("tpope/vim-fugitive")      -- Help simplify git with commits, add, push, etc
 
     use({
         "neoclide/coc.nvim",
@@ -165,24 +156,9 @@ return packer.startup(function(use)
         requires = { { "nvim-lua/plenary.nvim" } },
     })
 
-    use({
-        "OXY2DEV/markview.nvim",
-        lazy = false, -- Recommended
-    })
-
     use 'simrat39/rust-tools.nvim'
 
 
-    -- install without yarn or npm
-    use({
-        "iamcco/markdown-preview.nvim",
-        run = "cd app && npm install",
-        setup = function()
-            vim.g.mkdp_filetypes = {
-                "markdown" }
-        end,
-        ft = { "markdown" },
-    })
     use("MunifTanjim/prettier.nvim")
 
     if packer_bootstrap then

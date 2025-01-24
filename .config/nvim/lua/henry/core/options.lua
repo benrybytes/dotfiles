@@ -4,7 +4,6 @@ local api = vim.api
 opt.fillchars = { eob = ' ' }
 -- For Obsidian to use formatting
 opt.conceallevel = 1
-
 -- line numbers
 opt.relativenumber = true
 opt.number = true
