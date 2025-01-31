@@ -52,6 +52,14 @@ local util = require("lspconfig.util")
 
 -- LSP server configurations
 M.servers_config = {
+    ["asm_lsp"] = {
+        capabilities = M.capabilities,
+        on_attach = M.on_attach,
+    },
+    ["ts_ls"] = {
+        capabilities = M.capabilities,
+        on_attach = M.on_attach,
+    },
     ["lua_ls"] = {
         settings = {
             Lua = {

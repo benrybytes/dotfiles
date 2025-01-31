@@ -1,6 +1,7 @@
 local opt = vim.opt -- for conciseness
 local api = vim.api
 
+
 opt.fillchars = { eob = ' ' }
 -- For Obsidian to use formatting
 opt.conceallevel = 1

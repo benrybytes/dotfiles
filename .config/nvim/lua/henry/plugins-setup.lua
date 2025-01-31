@@ -31,8 +31,6 @@ return packer.startup(function(use)
     -- packer can manage itself
     use("wbthomason/packer.nvim")
 
-    -- Discord presence
-    use("andweeb/presence.nvim")
 
     -- Lua functions many plugins use
     use("nvim-lua/plenary.nvim")
@@ -84,6 +82,8 @@ return packer.startup(function(use)
         end
     })
 
+    -- Discord presence
+    use("andweeb/presence.nvim")
     -- file explorer icons
     use("kyazdani42/nvim-web-devicons")
 
@@ -111,7 +111,7 @@ return packer.startup(function(use)
 
     -- configuring lsp servers
     use("neovim/nvim-lspconfig") -- easily configure language servers
-    use("onsails/lspkind.nvim") -- vs-code like icons for autocompletion
+    use("onsails/lspkind.nvim")  -- vs-code like icons for autocompletion
 
     -- formatting & linting
     use({
@@ -140,16 +140,16 @@ return packer.startup(function(use)
     -- git integration
     use("lewis6991/gitsigns.nvim") -- show line modifications on left hand side
 
-    use({
-        "neoclide/coc.nvim",
-        branch = "release",
-        run = "yarn install --frozen-lockfile",
-        init = function()
-            vim.g.coc_start_at_startup = 1
-            vim.g.coc_config_home = 'lua/configurations/plugins/coc/'
-            vim.g.coc_global_extensions = require("configurations.plugins.coc.coc_ensure_installed")
-        end,
-    }) -- Lsp helper
+    -- use({
+    --     "neoclide/coc.nvim",
+    --     branch = "release",
+    --     run = "yarn install --frozen-lockfile",
+    --     init = function()
+    --         vim.g.coc_start_at_startup = 1
+    --         vim.g.coc_config_home = 'lua/configurations/plugins/coc/'
+    --         vim.g.coc_global_extensions = require("configurations.plugins.coc.coc_ensure_installed")
+    --     end,
+    -- }) -- Lsp helper
     use({
         "ThePrimeagen/harpoon",
         branch = "harpoon2",
