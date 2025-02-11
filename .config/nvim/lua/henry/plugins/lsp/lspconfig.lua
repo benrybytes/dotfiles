@@ -52,6 +52,10 @@ local util = require("lspconfig.util")
 
 -- LSP server configurations
 M.servers_config = {
+    ["rust_analyzer"] = {
+        capabilities = M.capabilities,
+        on_attach = M.on_attach,
+    },
     ["asm_lsp"] = {
         capabilities = M.capabilities,
         on_attach = M.on_attach,
@@ -84,6 +88,8 @@ M.servers_config = {
     },
     ["luau-lsp"] = {
 
+        capabilities = M.capabilities,
+        on_attach = M.on_attach,
         settings = {
             platform = {
                 type = "roblox",
@@ -109,16 +115,23 @@ M.servers_config = {
                 enabled = false,
                 port = 3667,
             },
-            -- capabilities = M.capabilities,
-            -- on_attach = M.on_attach,
         },
         cmd = { "luau-lsp", "lsp" },
-        -- root_dir = get_root_dir,
         filetypes = { "luau" },
     },
     ["pylsp"] = {
         capabilities = M.capabilities,
         on_attach = M.on_attach,
+        settings = {
+            pylsp = {
+                plugins = {
+                    pycodestyle = {
+                        ignore = { 'W391' },
+                        maxLineLength = 150
+                    }
+                }
+            }
+        }
     },
 }
 return M

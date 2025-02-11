@@ -1,4 +1,5 @@
-
+.config/Sonarr/*
+.config/qBittorrent/*
 .config/nvim/plugin/
 .ssh
 .DS_Store

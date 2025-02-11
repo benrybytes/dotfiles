@@ -36,7 +36,8 @@ telescope.setup({
             "include",
             "__pycache__",
             ".idea",
-            ".venv"
+            ".venv",
+            "target"
         }
     },
 })
