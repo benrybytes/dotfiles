@@ -37,7 +37,8 @@ telescope.setup({
             "__pycache__",
             ".idea",
             ".venv",
-            "target"
+            "target",
+            "PlayerModule"
         }
     },
 })

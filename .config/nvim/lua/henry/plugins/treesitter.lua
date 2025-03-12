@@ -5,6 +5,8 @@ if not status then
 	return
 end
 
+require('nvim-ts-autotag').setup()
+
 -- configure treesitter
 treesitter.setup({
 	-- enable syntax highlighting
@@ -14,7 +16,7 @@ treesitter.setup({
 	-- enable indentation
 	indent = { enable = true },
 	-- enable autotagging (w/ nvim-ts-autotag plugin)
-	-- autotag = { enable = true },
+	autotag = { enable = false },
 	sync_install = false,
 	modules = {},
 	ignore_install = {},

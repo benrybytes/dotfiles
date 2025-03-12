@@ -33,7 +33,7 @@ TERM = "xterm-256color"
 
 
 [font]
-size = 15
+size = 17
 
 [font.glyph_offset]
 x = 0

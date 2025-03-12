@@ -14,6 +14,9 @@ keymap.set("n", "<leader>-", "<C-x>", { desc = "Decrement number" }) -- decremen
 keymap.set("n", "<leader>db", "<cmd> DapToggleBreakpoint <CR>", { desc = "breakpoint to line" })
 keymap.set("n", "<leader>dr", "<cmd> DapContinue <CR>", { desc = "move to next breakpoint" })
 
+keymap.set("n", "<leader>i", "gg=G", { noremap = true, silent = true })
+
+
 -- Move chunks of lines when selected
 keymap.set("v", "J", ":m '>+1<CR>gv=gv")
 keymap.set("v", "K", ":m '<-2<CR>gv=gv")
