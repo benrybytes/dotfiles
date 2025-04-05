@@ -26,28 +26,28 @@ M.on_attach = function(client, bufnr)
 	end
 
 	-- Auto format on save
-if client.server_capabilities.documentFormattingProvider then
-    vim.api.nvim_create_autocmd("BufWritePre", {
-        group = vim.api.nvim_create_augroup("LspFormatting", { clear = true }),
-        buffer = bufnr,
-        callback = function()
-            -- Disable clangd's formatting temporarily
-            client.server_capabilities.documentFormattingProvider = false
-            
-            -- Save the current cursor position
-            local cur_pos = vim.api.nvim_win_get_cursor(0)
+	if client.server_capabilities.documentFormattingProvider then
+		vim.api.nvim_create_autocmd("BufWritePre", {
+			group = vim.api.nvim_create_augroup("LspFormatting", { clear = true }),
+			buffer = bufnr,
+			callback = function()
+				-- Disable clangd's formatting temporarily
+				client.server_capabilities.documentFormattingProvider = false
 
-            -- Manually format the file with `gg=G` but prevent cursor jump
-            vim.cmd('normal! gg=G')
+				-- Save the current cursor position
+				local cur_pos = vim.api.nvim_win_get_cursor(0)
 
-            -- Restore cursor position
-            vim.api.nvim_win_set_cursor(0, cur_pos)
+				-- Manually format the file with `gg=G` but prevent cursor jump
+				vim.cmd('normal! gg=G')
 
-            -- Re-enable clangd formatting after formatting is done
-            client.server_capabilities.documentFormattingProvider = true
-        end,
-    })
-end
+				-- Restore cursor position
+				vim.api.nvim_win_set_cursor(0, cur_pos)
+
+				-- Re-enable clangd formatting after formatting is done
+				client.server_capabilities.documentFormattingProvider = true
+			end,
+		})
+	end
 end
 
 -- Enable autocompletion
@@ -118,35 +118,35 @@ M.servers_config = {
 		capabilities = M.capabilities,
 		on_attach = M.on_attach,
 	},
-	["clangd"] = {
-		capabilities = M.capabilities,
-		on_attach = function(client, bufnr)
-			print("Clangd attached to buffer", bufnr)
-
-			-- Disable clangd formatting
-			client.server_capabilities.documentFormattingProvider = false
-			client.server_capabilities.documentRangeFormattingProvider = false
-
-			print("clangd document formatting disabled")
-
-			-- Clear any formatting autocmds
-			vim.api.nvim_clear_autocmds({ group = "LspFormatting" })
-
-			-- Debug the active autocmds
-			print("Active autocmds:")
-			vim.cmd('autocmd')
-
-			-- Custom formatting behavior
-			vim.api.nvim_create_autocmd("BufWritePre", {
-				group = vim.api.nvim_create_augroup("LspFormatting", { clear = true }),
-				buffer = bufnr,
-				callback = function()
-					print("Manual formatting triggered")
-					vim.cmd('normal! gg=G')
-				end,
-			})
-		end,
-	},
+	-- ["clangd"] = {
+	-- 	capabilities = M.capabilities,
+	-- 	on_attach = function(client, bufnr)
+	-- 		print("Clangd attached to buffer", bufnr)
+	--
+	-- 		-- Disable clangd formatting
+	-- 		client.server_capabilities.documentFormattingProvider = false
+	-- 		client.server_capabilities.documentRangeFormattingProvider = false
+	--
+	-- 		print("clangd document formatting disabled")
+	--
+	-- 		-- Clear any formatting autocmds
+	-- 		vim.api.nvim_clear_autocmds({ group = "LspFormatting" })
+	--
+	-- 		-- Debug the active autocmds
+	-- 		print("Active autocmds:")
+	-- 		vim.cmd('autocmd')
+	--
+	-- 		-- Custom formatting behavior
+	-- 		vim.api.nvim_create_autocmd("BufWritePre", {
+	-- 			group = vim.api.nvim_create_augroup("LspFormatting", { clear = true }),
+	-- 			buffer = bufnr,
+	-- 			callback = function()
+	-- 				print("Manual formatting triggered")
+	-- 				vim.cmd('normal! gg=G')
+	-- 			end,
+	-- 		})
+	-- 	end,
+	-- },
 	["luau-lsp"] = {
 
 		capabilities = M.capabilities,
