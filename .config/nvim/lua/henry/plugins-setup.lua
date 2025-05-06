@@ -54,6 +54,10 @@ return packer.startup(function(use)
 
 	-- Color Schemes
 	use({ "catppuccin/nvim", as = "catppuccin" })
+	use {'rktjmp/lush.nvim'}
+	use {
+		"zenbones-theme/zenbones.nvim",
+	}
 	use({ "rose-pine/neovim", name = "rose-pine" })
 
 	-- Split windows and navigation

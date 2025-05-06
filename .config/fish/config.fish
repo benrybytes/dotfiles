@@ -10,6 +10,8 @@ set -x PATH "/Library/Frameworks/Python.framework/Versions/3.12/bin" "$PATH"
 
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
+source "$HOME/.cargo/env.fish"
+
 set script_directory "$HOME/Documents/scripts/"
 
 # Define functions instead of aliases
