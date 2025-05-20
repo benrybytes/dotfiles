@@ -2,5 +2,6 @@
 .config/qBittorrent/
 .config/wireshark/
 .config/nvim/plugin/
+.config/nvim/blink.cmp
 .ssh
 .DS_Store

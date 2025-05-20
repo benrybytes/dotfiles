@@ -38,7 +38,8 @@ telescope.setup({
             ".idea",
             ".venv",
             "target",
-            "PlayerModule"
+            "PlayerModule",
+			"blink.cmp"
         }
     },
 })

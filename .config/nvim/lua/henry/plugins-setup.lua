@@ -28,9 +28,14 @@ augroup end
 
 -- add list of plugins to install | To install, save first, then exit
 return packer.startup(function(use)
+
 	-- packer can manage itself
 	use("wbthomason/packer.nvim")
 
+	use {
+		"williamboman/nvim-lsp-installer",
+		"neovim/nvim-lspconfig",
+	}
 
 	-- Lua functions many plugins use
 	use("nvim-lua/plenary.nvim")
@@ -41,7 +46,6 @@ return packer.startup(function(use)
 	}
 
 	use { 'kdheepak/monochrome.nvim' }
-
 	use({
 		"lopi-py/luau-lsp.nvim",
 
@@ -58,7 +62,6 @@ return packer.startup(function(use)
 	use {
 		"zenbones-theme/zenbones.nvim",
 	}
-	use({ "rose-pine/neovim", name = "rose-pine" })
 
 	-- Split windows and navigation
 	use("christoomey/vim-tmux-navigator")
@@ -98,29 +101,13 @@ return packer.startup(function(use)
 	use({ "nvim-telescope/telescope-fzf-native.nvim", run = "make" }) -- dependency for better sorting performance
 	use({ "nvim-telescope/telescope.nvim", branch = "0.1.x" })        -- fuzzy finder
 
-	-- autocompletion
-	use("hrsh7th/nvim-cmp")   -- completion plugin
-	use("hrsh7th/cmp-buffer") -- source for text in buffer
-	use("hrsh7th/cmp-path")   -- source for file system paths
-	use("hrsh7th/cmp-nvim-lua")
-	use("hrsh7th/cmp-nvim-lsp-signature-help")
-	use("hrsh7th/cmp-nvim-lsp") -- for autocompletion
-
-	-- managing & installing lsp servers, linters & formatters
-	use("williamboman/mason.nvim")           -- in charge of managing lsp servers, linters & formatters
-	use("williamboman/mason-lspconfig.nvim") -- bridges gap b/w mason & lspconfig
-
-	-- configuring lsp servers
-	use({"neovim/nvim-lspconfig",}) -- easily configure language servers
 	use("onsails/lspkind.nvim")  -- vs-code like icons for autocompletion
 
-	-- formatting & linting
 	use({
 		"jose-elias-alvarez/null-ls.nvim",
 	})                                 -- configure formatters & linters
 	use("jayp0521/mason-null-ls.nvim") -- bridges gap b/w mason & null-ls
 
-	-- treesitter configuration
 	use {
 		'windwp/nvim-ts-autotag',
 		branch = 'main',

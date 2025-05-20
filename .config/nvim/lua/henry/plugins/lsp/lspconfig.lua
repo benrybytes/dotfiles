@@ -1,57 +1,48 @@
 local M = {}
 
-local cmp_nvim_lsp = require("cmp_nvim_lsp")
-local keymap = vim.keymap
+require("nvim-lsp-installer").setup({
+    automatic_installation = true, -- automatically detect which servers to install (based on which servers are set up via lspconfig)
+    ui = {
+        icons = {
+            server_installed = "✓",
+            server_pending = "➜",
+            server_uninstalled = "✗"
+        }
+    },
+})
 
--- Function to set up keybinds and other configurations when LSP server is attached
-M.on_attach = function(client, bufnr)
-	local opts = {
-		noremap = true,
-		silent = true,
-		buffer = bufnr,
-	}
-
-	client.server_capabilities.signatureHelpProvider = false
-
-	-- Set keybinds
-	keymap.set("n", "gD", "<Cmd>lua vim.lsp.buf.declaration()<CR>", opts)
-	keymap.set("n", "gi", "<cmd>lua vim.lsp.buf.implementation()<CR>", opts)
-	keymap.set("n", "<leader>o", "<cmd>LSoutlineToggle<CR>", opts)
-
-	-- Typescript specific keymaps
-	if client.name == "tsserver" then
-		keymap.set("n", "<leader>rf", ":TypescriptRenameFile<CR>")
-		keymap.set("n", "<leader>oi", ":TypescriptOrganizeImports<CR>")
-		keymap.set("n", "<leader>ru", ":TypescriptRemoveUnused<CR>")
-	end
-
-	-- Auto format on save
-	if client.server_capabilities.documentFormattingProvider then
-		vim.api.nvim_create_autocmd("BufWritePre", {
-			group = vim.api.nvim_create_augroup("LspFormatting", { clear = true }),
-			buffer = bufnr,
-			callback = function()
-				-- Disable clangd's formatting temporarily
-				client.server_capabilities.documentFormattingProvider = false
-
-				-- Save the current cursor position
-				local cur_pos = vim.api.nvim_win_get_cursor(0)
-
-				-- Manually format the file with `gg=G` but prevent cursor jump
-				vim.cmd('normal! gg=G')
-
-				-- Restore cursor position
-				vim.api.nvim_win_set_cursor(0, cur_pos)
-
-				-- Re-enable clangd formatting after formatting is done
-				client.server_capabilities.documentFormattingProvider = true
-			end,
-		})
-	end
+-- symbolic link the "cargo build --release" directory as default packer install does not work
+-- ln -s /Users/henrymartinez/.config/nvim/blink.cmp /Users/henrymartinez/.local/share/nvim/site/pack/packer/start/blink.cmp
+local status, blink_cmp = pcall(require, 'blink.cmp')
+if not status then
+	print("could not load blink")
+	return
 end
 
--- Enable autocompletion
-M.capabilities = cmp_nvim_lsp.default_capabilities(vim.lsp.protocol.make_client_capabilities())
+local capabilities = blink_cmp.get_lsp_capabilities()
+local lspconfig = require('lspconfig')
+
+blink_cmp.setup({
+	fuzzy = { implementation = "prefer_rust_with_warning" },
+	keymap = {
+		['<C-k>'] = { 'select_prev', 'fallback' },
+		['<C-j>'] = { 'select_next', 'fallback' },
+		['<CR>']  = { 'select_and_accept', 'fallback' },
+	},
+	completion = {
+		menu = { border = 'rounded', draw = {
+			cursorline_priority = 0
+		} },
+		documentation = { window = { border = 'rounded' }, auto_show = true},
+		list = {
+			selection = { preselect = true, auto_insert = true }
+		},
+		ghost_text = {
+			enabled = true
+		}
+	},
+	signature = { window = { border = 'rounded' }}
+})
 
 -- Change diagnostic symbols in sign column
 local signs = { Error = "", Warn = " ", Hint = "", Info = " " }
@@ -70,8 +61,7 @@ M.servers_config = {
 				rust = "html",
 			},
 		},
-		capabilities = M.capabilities,
-		on_attach = M.on_attach,
+		capabilities,
 
 	},
 	["rust_analyzer"] = {
@@ -82,28 +72,22 @@ M.servers_config = {
 				rust = "html",
 			},
 		},
-		capabilities = M.capabilities,
-		on_attach = M.on_attach,
+		capabilities = capabilities,
 	},
 	["asm_lsp"] = {
-		capabilities = M.capabilities,
-		on_attach = M.on_attach,
+		capabilities,
 	},
 	["ts_ls"] = {
-		capabilities = M.capabilities,
-		on_attach = M.on_attach,
+		capabilities,
 	},
 	["jsonls"] = {
-		capabilities = M.capabilities,
-		on_attach = M.on_attach,
+		capabilities,
 	},
 	["jdtls"] = {
-		capabilities = M.capabilities,
-		on_attach = M.on_attach,
+		capabilities,
 	},
 	["cssls"] = {
-		capabilities = M.capabilities,
-		on_attach = M.on_attach,
+		capabilities,
 	},
 	["lua_ls"] = {
 		settings = {
@@ -115,42 +99,14 @@ M.servers_config = {
 			},
 		},
 		filetypes = { "lua" },
-		capabilities = M.capabilities,
-		on_attach = M.on_attach,
+		capabilities
 	},
-	-- ["clangd"] = {
-	-- 	capabilities = M.capabilities,
-	-- 	on_attach = function(client, bufnr)
-	-- 		print("Clangd attached to buffer", bufnr)
-	--
-	-- 		-- Disable clangd formatting
-	-- 		client.server_capabilities.documentFormattingProvider = false
-	-- 		client.server_capabilities.documentRangeFormattingProvider = false
-	--
-	-- 		print("clangd document formatting disabled")
-	--
-	-- 		-- Clear any formatting autocmds
-	-- 		vim.api.nvim_clear_autocmds({ group = "LspFormatting" })
-	--
-	-- 		-- Debug the active autocmds
-	-- 		print("Active autocmds:")
-	-- 		vim.cmd('autocmd')
-	--
-	-- 		-- Custom formatting behavior
-	-- 		vim.api.nvim_create_autocmd("BufWritePre", {
-	-- 			group = vim.api.nvim_create_augroup("LspFormatting", { clear = true }),
-	-- 			buffer = bufnr,
-	-- 			callback = function()
-	-- 				print("Manual formatting triggered")
-	-- 				vim.cmd('normal! gg=G')
-	-- 			end,
-	-- 		})
-	-- 	end,
-	-- },
-	["luau-lsp"] = {
+	["clangd"] = {
+		capabilities,
+	},
+	["luau_lsp"] = {
 
-		capabilities = M.capabilities,
-		on_attach = M.on_attach,
+		capabilities,
 		settings = {
 			platform = {
 				type = "roblox",
@@ -181,8 +137,7 @@ M.servers_config = {
 		filetypes = { "luau" },
 	},
 	["pylsp"] = {
-		capabilities = M.capabilities,
-		on_attach = M.on_attach,
+		capabilities,
 		settings = {
 			pylsp = {
 				plugins = {
@@ -195,4 +150,7 @@ M.servers_config = {
 		}
 	},
 }
-return M
+
+for server, config in pairs(M.servers_config) do
+	lspconfig[server].setup(config)
+end
