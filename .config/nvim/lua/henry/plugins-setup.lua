@@ -31,11 +31,11 @@ return packer.startup(function(use)
 
 	-- packer can manage itself
 	use("wbthomason/packer.nvim")
+	use("saghen/blink.cmp")
+	use("neovim/nvim-lspconfig")
 
-	use {
-		"williamboman/nvim-lsp-installer",
-		"neovim/nvim-lspconfig",
-	}
+	use { "mason-org/mason.nvim", }
+	use { "williamboman/mason-lspconfig.nvim", }
 
 	-- Lua functions many plugins use
 	use("nvim-lua/plenary.nvim")

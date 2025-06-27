@@ -1,18 +1,29 @@
-local M = {}
+-- Setup Mason and LSP servers
+require("mason").setup()
+local _, lspconfig = pcall(require, "lspconfig")
 
-require("nvim-lsp-installer").setup({
-    automatic_installation = true, -- automatically detect which servers to install (based on which servers are set up via lspconfig)
-    ui = {
-        icons = {
-            server_installed = "✓",
-            server_pending = "➜",
-            server_uninstalled = "✗"
-        }
-    },
+local status, mason_lspconfig = pcall(require, "mason-lspconfig")
+if not status then
+	print("could not load mason")
+end
+
+mason_lspconfig.setup({
+	ensure_installed = {
+		"html",
+		"rust_analyzer",
+		"asm_lsp",
+		"jsonls",
+		"jdtls",
+		"cssls",
+		"lua_ls",
+		"clangd",
+		"luau_lsp",
+		"pylsp",
+	},
+	automatic_enable = {}
 })
 
--- symbolic link the "cargo build --release" directory as default packer install does not work
--- ln -s /Users/henrymartinez/.config/nvim/blink.cmp /Users/henrymartinez/.local/share/nvim/site/pack/packer/start/blink.cmp
+-- Blink CMP setup
 local status, blink_cmp = pcall(require, 'blink.cmp')
 if not status then
 	print("could not load blink")
@@ -20,7 +31,6 @@ if not status then
 end
 
 local capabilities = blink_cmp.get_lsp_capabilities()
-local lspconfig = require('lspconfig')
 
 blink_cmp.setup({
 	fuzzy = { implementation = "prefer_rust_with_warning" },
@@ -30,87 +40,78 @@ blink_cmp.setup({
 		['<CR>']  = { 'select_and_accept', 'fallback' },
 	},
 	completion = {
-		menu = { border = 'rounded', draw = {
-			cursorline_priority = 0
-		} },
-		documentation = { window = { border = 'rounded' }, auto_show = true},
+		menu = { border = 'rounded', draw = { cursorline_priority = 0 } },
+		documentation = { window = { border = 'rounded' }, auto_show = true },
 		list = {
 			selection = { preselect = true, auto_insert = true }
 		},
-		ghost_text = {
-			enabled = true
-		}
+		ghost_text = { enabled = true }
 	},
-	signature = { window = { border = 'rounded' }}
+	signature = { window = { border = 'rounded' } }
 })
 
--- Change diagnostic symbols in sign column
+-- Diagnostic signs
 local signs = { Error = "", Warn = " ", Hint = "", Info = " " }
 for type, icon in pairs(signs) do
 	local hl = "DiagnosticSign" .. type
 	vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
 end
 
--- LSP server configurations
-M.servers_config = {
-	["html"] = {
-		init_options = {
-			userLanguages = {
-				eelixir = "html-eex",
-				eruby = "erb",
-				rust = "html",
-			},
-		},
-		capabilities,
+-- on_attach function
+local function on_attach(_, bufnr)
+	local opts = { noremap = true, silent = true, buffer = bufnr }
+	vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
+	vim.keymap.set("n", "gi", vim.lsp.buf.implementation, opts)
 
-	},
-	["rust_analyzer"] = {
+	vim.api.nvim_create_autocmd("BufWritePre", {
+		buffer = bufnr,
+		callback = function()
+			vim.lsp.buf.format({ async = true })
+		end,
+	})
+end
+
+-- LSP server configurations
+local servers = {
+	html = {
 		init_options = {
 			userLanguages = {
 				eelixir = "html-eex",
 				eruby = "erb",
 				rust = "html",
 			},
-		},
-		capabilities = capabilities,
+		}
 	},
-	["asm_lsp"] = {
-		capabilities,
+	rust_analyzer = {
+		settings = {
+			["rust-analyzer"] = {
+				checkOnSave = true,
+				check = { command = "clippy" },
+				diagnostics = { enable = true, disabled = { "unreachable-code" } },
+				cargo = { allFeatures = true, loadOutDirsFromCheck = true },
+				procMacro = { enable = true },
+			}
+		}
 	},
-	["ts_ls"] = {
-		capabilities,
-	},
-	["jsonls"] = {
-		capabilities,
-	},
-	["jdtls"] = {
-		capabilities,
-	},
-	["cssls"] = {
-		capabilities,
-	},
-	["lua_ls"] = {
+	asm_lsp = {},
+	jsonls = {},
+	jdtls = {},
+	cssls = {},
+	lua_ls = {
 		settings = {
 			Lua = {
 				diagnostics = { globals = { "vim", "require" } },
 				workspace = { library = vim.api.nvim_get_runtime_file("", true) },
 				telemetry = { enable = false },
 				hint = { enabled = true },
-			},
+			}
 		},
 		filetypes = { "lua" },
-		capabilities
 	},
-	["clangd"] = {
-		capabilities,
-	},
-	["luau_lsp"] = {
-
-		capabilities,
+	clangd = {},
+	luau_lsp = {
 		settings = {
-			platform = {
-				type = "roblox",
-			},
+			platform = { type = "roblox" },
 			sourcemap = {
 				enabled = true,
 				autogenerate = true,
@@ -136,21 +137,22 @@ M.servers_config = {
 		cmd = { "luau-lsp", "lsp" },
 		filetypes = { "luau" },
 	},
-	["pylsp"] = {
-		capabilities,
+	pylsp = {
 		settings = {
 			pylsp = {
 				plugins = {
 					pycodestyle = {
-						ignore = { 'W391' },
-						maxLineLength = 150
+						ignore = { "W391" },
+						maxLineLength = 150,
 					}
 				}
 			}
 		}
-	},
+	}
 }
 
-for server, config in pairs(M.servers_config) do
-	lspconfig[server].setup(config)
+for server_name, config in pairs(servers) do
+	config.capabilities = config.capabilities or capabilities
+	config.on_attach = config.on_attach or on_attach
+	lspconfig[server_name].setup(config)
 end
